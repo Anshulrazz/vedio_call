@@ -1,0 +1,59 @@
+/* Base styles */
+.video {
+    display: flex;
+    margin-top: 40px;
+    margin-left: 20px;
+  }
+  
+  .mystream,
+  .fstream {
+    border: 2px solid lawngreen;
+    border-radius: 8px;
+    margin-left: 50px;  
+  }
+  
+  .controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Adjust as needed */
+  }
+  
+  .mute-button,
+  .call-button,
+  .send-stream {
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-right: 10px; /* Adjust spacing between buttons */
+  }
+  
+  .mute-button:hover,
+  .call-button:hover,
+  .send-stream:hover {
+    background-color: #0e75b5; /* Darker shade on hover */
+  }
+  
+  p {
+    margin: 0; /* Remove default margin for <p> */
+    color: #888; /* Placeholder text color */
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .video {
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px; /* Adjust as needed */
+      margin-left: 0;
+    }
+  
+    .mystream,
+    .fstream {
+      margin-left: 0;
+      margin-top: 20px;
+    }
+  }
+  
