@@ -2,12 +2,14 @@ import React, { useEffect, useCallback, useState } from "react";
 import ReactPlayer from "react-player";
 import peer from "../service/peer";
 import { useSocket } from "../context/SocketProvider";
+import "./room.css"; // Assuming you have a CSS file for styling
 
 const RoomPage = () => {
   const socket = useSocket();
   const [remoteSocketId, setRemoteSocketId] = useState(null);
   const [myStream, setMyStream] = useState();
   const [remoteStream, setRemoteStream] = useState();
+  const [isMuted, setIsMuted] = useState(false);
 
   const handleUserJoined = useCallback(({ email, id }) => {
     console.log(`Email ${email} joined room`);
@@ -109,36 +111,48 @@ const RoomPage = () => {
     handleNegoNeedFinal,
   ]);
 
+  // Function to toggle mute/unmute
+  const toggleMute = () => {
+    setIsMuted(prevState => !prevState);
+  };
+
   return (
-    <div>
-      <h1>Room Page</h1>
-      <h4>{remoteSocketId ? "Connected" : "No one in room"}</h4>
-      {myStream && <button onClick={sendStreams}>Send Stream</button>}
-      {remoteSocketId && <button onClick={handleCallUser}>CALL</button>}
-      {myStream && (
-        <>
-          <h1>My Stream</h1>
-          <ReactPlayer
-            playing
-            muted
-            height="400px"
-            width="600px"
-            url={myStream}
-          />
-        </>
-      )}
-      {remoteStream && (
-        <>
-          <h1>Remote Stream</h1>
-          <ReactPlayer
-            playing
-            muted
-            height="400px"
-            width="600px"
-            url={remoteStream}
-          />
-        </>
-      )}
+    <div className="room-page-container">
+      <div className="controls">
+        <button className="mute-button" onClick={toggleMute}>
+          {isMuted ? "Unmute" : "Mute"}
+        </button>
+        {remoteSocketId ? (
+          <button className="call-button" onClick={handleCallUser}>Call</button>
+        ) : (
+          <p>No one in room</p>
+        )}
+        {myStream && <button className="send-stream" onClick={sendStreams}>Send Stream</button>}
+      </div>
+      <div className="video">
+        <div className="mystream">
+          {myStream && (
+            <ReactPlayer
+              playing
+              muted={isMuted}
+              height="100%"
+              width="100%"
+              url={myStream}
+            />
+          )}
+        </div>
+        <div className="fstream">
+          {remoteStream && (
+            <ReactPlayer
+              playing
+              muted={isMuted}
+              height="100%"
+              width="100%"
+              url={remoteStream}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 };
