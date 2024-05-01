@@ -4,7 +4,7 @@ import peer from "../service/peer";
 import { useSocket } from "../context/SocketProvider";
 import "./room.css"; // Assuming you have a CSS file for styling
 
-const Room = () => {
+const RoomPage = () => {
   const socket = useSocket();
   const [remoteSocketId, setRemoteSocketId] = useState(null);
   const [myStream, setMyStream] = useState();
@@ -157,4 +157,4 @@ const Room = () => {
   );
 };
 
-export default Room;
+export default RoomPage;
