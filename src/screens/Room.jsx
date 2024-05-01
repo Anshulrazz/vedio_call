@@ -21,9 +21,14 @@ const RoomPage = () => {
       audio: true,
       video: true,
     });
+    const tracks = stream.getTracks();
+    const audioTrack = tracks.find(track => track.kind === 'audio');
+    const videoTrack = tracks.find(track => track.kind === 'video');
+    const newStream = new MediaStream([audioTrack, videoTrack]);
+    
     const offer = await peer.getOffer();
     socket.emit("user:call", { to: remoteSocketId, offer });
-    setMyStream(stream);
+    setMyStream(newStream);
   }, [remoteSocketId, socket]);
 
   const handleIncommingCall = useCallback(
@@ -33,7 +38,12 @@ const RoomPage = () => {
         audio: true,
         video: true,
       });
-      setMyStream(stream);
+      const tracks = stream.getTracks();
+      const audioTrack = tracks.find(track => track.kind === 'audio');
+      const videoTrack = tracks.find(track => track.kind === 'video');
+      const newStream = new MediaStream([audioTrack, videoTrack]);
+      
+      setMyStream(newStream);
       console.log(`Incoming Call`, from, offer);
       const ans = await peer.getAnswer(offer);
       socket.emit("call:accepted", { to: from, ans });
@@ -42,8 +52,10 @@ const RoomPage = () => {
   );
 
   const sendStreams = useCallback(() => {
-    for (const track of myStream.getTracks()) {
-      peer.peer.addTrack(track, myStream);
+    if (myStream) {
+      for (const track of myStream.getTracks()) {
+        peer.peer.addTrack(track, myStream);
+      }
     }
   }, [myStream]);
 
