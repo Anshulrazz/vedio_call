@@ -24,7 +24,7 @@ const RoomPage = () => {
     const tracks = stream.getTracks();
     const audioTrack = tracks.find(track => track.kind === 'audio');
     const videoTrack = tracks.find(track => track.kind === 'video');
-    const newStream = new MediaStream([audioTrack, videoTrack]);
+    const newStream = new MediaStream([videoTrack]);
     
     const offer = await peer.getOffer();
     socket.emit("user:call", { to: remoteSocketId, offer });
@@ -41,7 +41,7 @@ const RoomPage = () => {
       const tracks = stream.getTracks();
       const audioTrack = tracks.find(track => track.kind === 'audio');
       const videoTrack = tracks.find(track => track.kind === 'video');
-      const newStream = new MediaStream([audioTrack, videoTrack]);
+      const newStream = new MediaStream([videoTrack]);
       
       setMyStream(newStream);
       console.log(`Incoming Call`, from, offer);
@@ -150,6 +150,7 @@ const RoomPage = () => {
               height="100%"
               width="100%"
               url={myStream}
+              controls
             />
           )}
         </div>
@@ -161,6 +162,7 @@ const RoomPage = () => {
               height="100%"
               width="100%"
               url={remoteStream}
+              controls
             />
           )}
         </div>
